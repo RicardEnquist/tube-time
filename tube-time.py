@@ -10,16 +10,25 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-#serviceurl = "https://api.resrobot.se/v2/departureBoard?"
+# serviceurl = "https://api.resrobot.se/v2/departureBoard?"
+# params = dict(
+#     key = "72d054f6-6680-4584-b7ed-5097956524aa",
+#     id = "740021668",
+#     maxJourneys = 6,
+#     products = 32,
+#     passlist = 0,
+#     format = "json"
+#     )
+
 serviceurl = "https://api.resrobot.se/v2/location.name?"
-
 place = input("Hållplats: ")
-
 params = dict(
     input = place,
     format = "json",
     key = "9ef9290d-c9ae-409c-9862-2b0e5d847b2a"
     )
+
+
 
 url = serviceurl + urllib.parse.urlencode(params)
 uh = urllib.request.urlopen(url, context=ctx)
