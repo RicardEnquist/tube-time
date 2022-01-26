@@ -4,64 +4,92 @@ import re
 import requests
 import ssl
 import datetime
+from tkinter import *
 
 # Ignore SSL certificate errors
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-# serviceurl = "https://api.resrobot.se/v2/departureBoard?"
-# params = dict(
-#     key = "72d054f6-6680-4584-b7ed-5097956524aa",
-#     id = "740021668",
-#     maxJourneys = 6,
-#     products = 32,
-#     passlist = 0,
-#     format = "json"
-#     )
+root = Tk()
+root.title("Tube-Time")
 
-serviceurl = "https://api.resrobot.se/v2/location.name?"
-place = input("Hållplats: ")
-params = dict(
-    input = place,
+def getDepartures():
+    global station
+    station = stationInput.get()
+    #stationLabel = Label(root, text=stationInput.get())
+    #stationLabel.grid(row=4, column=0)
+
+    stationurl = "https://api.resrobot.se/v2/location.name?"
+    paramsStation = dict(
+    input = station,
     format = "json",
     key = "9ef9290d-c9ae-409c-9862-2b0e5d847b2a"
     )
 
+    url = stationurl + urllib.parse.urlencode(paramsStation)
+    uh = urllib.request.urlopen(url, context=ctx)
+    data = uh.read().decode()
+    js = json.loads(data)
+    stationID = js["StopLocation"][0]["id"]
+    print(stationID)
+
+    departureurl = "https://api.resrobot.se/v2/departureBoard?"
+    paramsDeparture = dict(
+    key = "72d054f6-6680-4584-b7ed-5097956524aa",
+    id = stationID,
+    maxJourneys = 6,
+    products = 32,
+    passlist = 0,
+    format = "json"
+    )
+
+    url = departureurl + urllib.parse.urlencode(paramsDeparture)
+    uh = urllib.request.urlopen(url, context=ctx)
+    data = uh.read().decode()
+    js = json.loads(data)
+    print(json.dumps(js, indent=4))
 
 
-url = serviceurl + urllib.parse.urlencode(params)
-uh = urllib.request.urlopen(url, context=ctx)
-data = uh.read().decode()
-js = json.loads(data)
-
-print(json.dumps(js, indent=4))
-
-for dep in range(len(js["Departure"])):
-    break
-    #if js["Departure"][0]
-    #print("avgångar")
 
 
-#print(re.findall("^\S+", js["Departure"][0]["direction"])[0] + ": " + js["Departure"][0]["time"])
+    #print(re.findall("^\S+", js["Departure"][0]["direction"])[0] + ": " + js["Departure"][0]["time"])
 
-arrival1_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][0]["time"], "%H:%M:%S").time())
-arrival2_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][1]["time"], "%H:%M:%S").time())
-arrival3_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][2]["time"], "%H:%M:%S").time())
+    arrival1_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][0]["time"], "%H:%M:%S").time())
+    arrival2_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][1]["time"], "%H:%M:%S").time())
+    arrival3_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][2]["time"], "%H:%M:%S").time())
 
-current_time = datetime.datetime.now()
-waiting1_time = (arrival1_time - current_time)
-waiting2_time = (arrival2_time - current_time)
-waiting3_time = (arrival3_time - current_time)
-waiting1_min = waiting1_time.total_seconds() / 60.0
-waiting2_min = waiting2_time.total_seconds() / 60.0
-waiting3_min = waiting3_time.total_seconds() / 60.0
+    current_time = datetime.datetime.now()
+    waiting1_time = (arrival1_time - current_time)
+    waiting2_time = (arrival2_time - current_time)
+    waiting3_time = (arrival3_time - current_time)
+    waiting1_min = waiting1_time.total_seconds() / 60.0
+    waiting2_min = waiting2_time.total_seconds() / 60.0
+    waiting3_min = waiting3_time.total_seconds() / 60.0
 
-if waiting1_min < 0:
-    print(re.findall("^\S+", js["Departure"][0]["direction"])[0], "Nu", " ", end='')
-    print(re.findall("^\S+", js["Departure"][1]["direction"])[0], int(waiting2_min), "min", " ", end='')
-    print(re.findall("^\S+", js["Departure"][2]["direction"])[0], int(waiting3_min), "min")
-else:
-    print(re.findall("^\S+", js["Departure"][0]["direction"])[0], int(waiting1_min), "min", " ", end='')
-    print(re.findall("^\S+", js["Departure"][1]["direction"])[0], int(waiting2_min), "min", " ", end='')
-    print(re.findall("^\S+", js["Departure"][2]["direction"])[0], int(waiting3_min), "min")
+    if waiting1_min < 0:
+        departure1 = re.findall("^\S+", js["Departure"][0]["direction"])[0] + " " + "Nu"
+        departure2 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting2_min)) + " min"
+        departure3 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting3_min)) + " min"
+    else:
+        departure1 = re.findall("^\S+", js["Departure"][0]["direction"])[0] + " " + str(int(waiting1_min)) + " min"
+        departure2 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting2_min)) + " min"
+        departure3 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting3_min)) + " min"
+
+    departure1Label = Label(root, text=departure1)
+    departure1Label.grid(row=4, column=0)
+    departure2Label = Label(root, text=departure2)
+    departure2Label.grid(row=5, column=0)
+    departure3Label = Label(root, text=departure3)
+    departure3Label.grid(row=6, column=0)
+
+stationInput = Entry(root, width=50)
+stationInput.grid(row=0, column=0)
+runButton = Button(root, text="Get station", command=getDepartures)
+runButton.grid(row=1, column=0)
+
+root.mainloop()
+
+# print(json.dumps(js, indent=4))
+
+
