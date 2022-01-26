@@ -50,11 +50,6 @@ def getDepartures():
     js = json.loads(data)
     print(json.dumps(js, indent=4))
 
-
-
-
-    #print(re.findall("^\S+", js["Departure"][0]["direction"])[0] + ": " + js["Departure"][0]["time"])
-
     arrival1_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][0]["time"], "%H:%M:%S").time())
     arrival2_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][1]["time"], "%H:%M:%S").time())
     arrival3_time = datetime.datetime.combine(datetime.date.today(), datetime.datetime.strptime(js["Departure"][2]["time"], "%H:%M:%S").time())
@@ -76,12 +71,16 @@ def getDepartures():
         departure2 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting2_min)) + " min"
         departure3 = re.findall("^\S+", js["Departure"][1]["direction"])[0] + " " + str(int(waiting3_min)) + " min"
 
-    departure1Label = Label(root, text=departure1)
-    departure1Label.grid(row=4, column=0)
-    departure2Label = Label(root, text=departure2)
-    departure2Label.grid(row=5, column=0)
-    departure3Label = Label(root, text=departure3)
-    departure3Label.grid(row=6, column=0)
+    departure1Label.config(text=departure1)
+    departure2Label.config(text=departure2)
+    departure3Label.config(text=departure3)
+
+departure1Label = Label(root)
+departure1Label.grid(row=4, column=0)
+departure2Label = Label(root)
+departure2Label.grid(row=5, column=0)
+departure3Label = Label(root)
+departure3Label.grid(row=6, column=0)
 
 stationInput = Entry(root, width=50)
 stationInput.grid(row=0, column=0)
@@ -89,7 +88,3 @@ runButton = Button(root, text="Get station", command=getDepartures)
 runButton.grid(row=1, column=0)
 
 root.mainloop()
-
-# print(json.dumps(js, indent=4))
-
-
