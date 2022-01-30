@@ -11,8 +11,17 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+bgcolor = "#4F5257"
+signBgColor = "#110F04"
+signTextColor = "#DED311"
+lineColorGreen = "#00A748"
+lineColorBlue = "#0095D2"
+lineColorRed = "#E40315"
+
 root = Tk()
 root.title("Tube-Time")
+root.geometry("800x200")
+root.configure(background=bgcolor)
 
 def getDepartures():
     global station
