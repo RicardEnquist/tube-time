@@ -97,4 +97,3 @@ runButton = Button(root, text="Get station", command=getDepartures)
 runButton.grid(row=1, column=0)
 
 root.mainloop()
-testing git
