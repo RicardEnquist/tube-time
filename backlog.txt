@@ -10,3 +10,4 @@ Make confiuguration menu
     Update interval?
     North/south bound?
 Get position/nearest stations from IP?
+If no station ID is found in API, give error message "Station not found"
