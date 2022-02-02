@@ -4,6 +4,7 @@ Make main screen UX in tkinter (background image, orange text, etc., copy from S
         Add color for pendeltåg, tvärbanan, gul T-bana, etc.
     Time since last update
     Button to start updates for X minutes (screen empty when data no longer updated?)
+    Fix relative file path for icon image
 Make confiuguration menu
     Enter API-keys
     Search for station ID

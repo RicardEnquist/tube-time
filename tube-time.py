@@ -32,6 +32,10 @@ rootHeight = 200
 root.geometry(str(rootWidth) + "x" + str(rootHeight))
 root.configure(background=bgcolor)
 
+# Add icon
+#root.iconphoto(True, Tk.photoimage(file='C:/Users/RicardEnquist/Downloads/tube-time/UX/icon.png'))
+root.iconbitmap('icon.ico')
+
 # Create line color field
 relWidth = 0.94
 relHeight = 0.2
