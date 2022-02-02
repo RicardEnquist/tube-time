@@ -1,3 +1,4 @@
+from cProfile import label
 import urllib.request, urllib.parse, urllib.error
 import json
 import re
@@ -18,10 +19,15 @@ lineColorGreen = "#00A748"
 lineColorBlue = "#0095D2"
 lineColorRed = "#E40315"
 
+#Defult line color
+lineColor = lineColorGreen
+
 root = Tk()
 root.title("Tube-Time")
 root.geometry("800x200")
 root.configure(background=bgcolor)
+lineColorLabel = Label(root, bg=lineColor, width = 20).place(x=100, y=100)
+
 
 def getDepartures():
     global station
