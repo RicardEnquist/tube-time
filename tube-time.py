@@ -12,6 +12,7 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+# Define colors
 bgcolor = "#4F5257"
 signBgColor = "#110F04"
 signTextColor = "#DED311"
@@ -19,14 +20,22 @@ lineColorGreen = "#00A748"
 lineColorBlue = "#0095D2"
 lineColorRed = "#E40315"
 
-#Defult line color
+# Defult line color
 lineColor = lineColorGreen
 
 root = Tk()
 root.title("Tube-Time")
-root.geometry("800x200")
+
+# Create root geometry
+rootWidth = 800
+rootHeight = 200
+root.geometry(str(rootWidth) + "x" + str(rootHeight))
 root.configure(background=bgcolor)
-lineColorLabel = Label(root, bg=lineColor, width = 20).place(x=100, y=100)
+
+# Create line color field
+relWidth = 0.94
+relHeight = 0.2
+lineColorLabel = Label(root, bg=lineColor).place(relwidth=relWidth, relheight=relHeight, relx=((1-relWidth)/2), rely=1-relHeight)
 
 
 def getDepartures():
@@ -90,16 +99,16 @@ def getDepartures():
     departure2Label.config(text=departure2)
     departure3Label.config(text=departure3)
 
-departure1Label = Label(root)
-departure1Label.grid(row=4, column=0)
-departure2Label = Label(root)
-departure2Label.grid(row=5, column=0)
-departure3Label = Label(root)
-departure3Label.grid(row=6, column=0)
+# departure1Label = Label(root)
+# departure1Label.grid(row=4, column=0)
+# departure2Label = Label(root)
+# departure2Label.grid(row=5, column=0)
+# departure3Label = Label(root)
+# departure3Label.grid(row=6, column=0)
 
-stationInput = Entry(root, width=50)
-stationInput.grid(row=0, column=0)
-runButton = Button(root, text="Get station", command=getDepartures)
-runButton.grid(row=1, column=0)
+# stationInput = Entry(root, width=50)
+# stationInput.grid(row=0, column=0)
+# runButton = Button(root, text="Get station", command=getDepartures)
+# runButton.grid(row=1, column=0)
 
 root.mainloop()
