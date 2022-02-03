@@ -1,4 +1,3 @@
-from cProfile import label
 import urllib.request, urllib.parse, urllib.error
 import json
 import re
@@ -14,8 +13,8 @@ ctx.verify_mode = ssl.CERT_NONE
 
 # Define colors
 bgcolor = "#4F5257"
-signBgColor = "#110F04"
-signTextColor = "#DED311"
+dispBgColor = "#110F04"
+dispTextColor = "#DED311"
 lineColorGreen = "#00A748"
 lineColorBlue = "#0095D2"
 lineColorRed = "#E40315"
@@ -38,12 +37,74 @@ root.iconbitmap('icon.ico')
 # Create line color label
 relWidth = 0.94
 relHeight = 0.2
-lineColorLabel = Label(root, bg=lineColor).place(relwidth=relWidth,
-                                                relheight=relHeight, relx=((1-relWidth)/2), rely=1-relHeight)
+lineColorLabel = Label(root, bg=lineColor)
+lineColorLabel.place(relwidth=relWidth,
+                        relheight=relHeight,
+                        relx=((1-relWidth)/2),
+                        rely=1-relHeight)
 
-# Create display label
-dispLabel = Label(root, bg=signBgColor).place(relwidth=relWidth,
-                                                relheight=0.7, relx=((1-relWidth)/2), rely=relHeight/2)
+# Create display labels, primary and secondary
+departureDirection1 = "Akalla"
+departureTime1 = "10 min"
+departureDirection2 = "Kungsträdgården"
+departureTime2 = "13 min"
+
+dispFrame = Frame(root, bg=dispBgColor)
+dispFrame.place(
+    relwidth=relWidth,
+    relheight=0.7,
+    relx=((1-relWidth)/2),
+    rely=relHeight/2)
+
+# Makes column 0 of frame expand to take up any free space,
+# so that column 1 sticks to east
+dispFrame.columnconfigure(0, weight=1)
+
+# Upper leftmost label inside dispFrame
+primDispLabelStation = Label(
+    dispFrame,
+    bg=dispBgColor,
+    fg=dispTextColor,
+    font=("Helvetica 40 bold"),
+    padx=10,
+    pady=0,
+    text=departureDirection1)
+
+primDispLabelStation.grid(
+    row = 0,
+    column = 0,
+    sticky="nw")
+
+# Upper rightmost label inside dispFrame
+primDispLabelTime = Label(
+    dispFrame,
+    bg=dispBgColor,
+    fg=dispTextColor,
+    font=("Helvetica 40 bold"),
+    padx=10,
+    pady=0,
+    text=departureTime1)
+
+primDispLabelTime.grid(
+    row=0,
+    column=1,
+    sticky="ne")
+
+# Bottom label inside dispFrame, spans two columns
+secDispLabel = Label(
+    dispFrame,
+    bg=dispBgColor,
+    fg=dispTextColor,
+    font=("Helvetica 40 bold"),
+    padx=10,
+    pady=0,
+    text=departureDirection2 + "  " + departureTime2)
+
+secDispLabel.grid(
+    row=1,
+    column=0,
+    columnspan=2,
+    sticky="sw")
 
 def getDepartures():
     global station
