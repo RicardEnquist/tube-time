@@ -35,11 +35,15 @@ root.configure(background=bgcolor)
 # Add icon
 root.iconbitmap('icon.ico')
 
-# Create line color field
+# Create line color label
 relWidth = 0.94
 relHeight = 0.2
-lineColorLabel = Label(root, bg=lineColor).place(relwidth=relWidth, relheight=relHeight, relx=((1-relWidth)/2), rely=1-relHeight)
+lineColorLabel = Label(root, bg=lineColor).place(relwidth=relWidth,
+                                                relheight=relHeight, relx=((1-relWidth)/2), rely=1-relHeight)
 
+# Create display label
+dispLabel = Label(root, bg=signBgColor).place(relwidth=relWidth,
+                                                relheight=0.7, relx=((1-relWidth)/2), rely=relHeight/2)
 
 def getDepartures():
     global station
