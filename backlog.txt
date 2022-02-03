@@ -1,3 +1,10 @@
+Introduce configuration menu to set:
+    station and direction
+    refresh rate
+    running time
+    API-keys
+    
+
 Make main screen UX in tkinter (background image, orange text, etc., copy from SL)
     Dynamic line number
     Dynamic line color
