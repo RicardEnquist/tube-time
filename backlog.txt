@@ -1,21 +1,20 @@
-Introduce configuration menu to set:
-    station and direction
-    refresh rate
-    running time
-    API-keys
-    
+Read config data from config.json at startup
+    If empty, prompts user to fill config data
+
+
+
+
 
 Make main screen UX in tkinter (background image, orange text, etc., copy from SL)
     Dynamic line number
-    Dynamic line color
-        Add color for pendeltåg, tvärbanan, gul T-bana, etc.
     Time since last update
     Button to start updates for X minutes (screen empty when data no longer updated?)
-    Fix relative file path for icon image
+
 Make confiuguration menu
     Enter API-keys
     Search for station ID
-    Update interval?
+    Refresh rate
     North/south bound?
+        At startup, look for stored config data with try/except, if it fails - message config missing
 Get position/nearest stations from IP?
 If no station ID is found in API, give error message "Station not found"

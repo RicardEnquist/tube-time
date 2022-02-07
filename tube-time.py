@@ -6,6 +6,8 @@ import ssl
 import datetime
 from tkinter import *
 
+root = Tk()
+
 # Define colors
 bgcolor = "#4F5257"
 dispBgColor = "#110F04"
@@ -23,20 +25,21 @@ lineColors = {
     "19": lineColorGreen,
     }
 
-
-
 # Configuration
-refInt = 20000
+global stationKey
+global departureKey
+global refreshRate
+global refreshTimeout
+global stationPhrase
+
+
 stationKey = "9ef9290d-c9ae-409c-9862-2b0e5d847b2a"
 departureKey = "72d054f6-6680-4584-b7ed-5097956524aa"
-station = "Akalla"
+refreshRate = 1
+refreshTimeout = 15
+stationPhrase = "Akalla"
 
-# TEST VAVLUES TO BE AUTOMATED
-lineColor = lineColorGreen
-
-root = Tk()
 root.title("Tube-Time")
-
 # Create root geometry
 rootWidth = 800
 rootHeight = 200
@@ -55,7 +58,7 @@ def getDepartures():
 
     stationurl = "https://api.resrobot.se/v2/location.name?"
     paramsStation = dict(
-    input = station,
+    input = stationPhrase,
     format = "json",
     key = stationKey
     )
@@ -113,15 +116,132 @@ def getDepartures():
     primDispLabelStation.configure(text=departureDirection1)
     primDispLabelTime.configure(text=departureTime1)
     secDispLabel.configure(text=departureDirection2 + " " + departureTime2)
-    lineColorLabel.configure(bg=lineColors.get(js["Departure"][0]["Product"]["num"]))
-    root.after(refInt, getDepartures)
+    lineColorButton.configure(bg=lineColors.get(js["Departure"][0]["Product"]["num"]), activebackground=lineColors.get(js["Departure"][0]["Product"]["num"]))
+    root.after((refreshRate*60*1000), getDepartures)
     
+def config():
+    configMenu = Toplevel(root)
+    configMenu.title("Configuration menu")
+
+    stationKeyLabel = Label(configMenu, text="Station API key:")
+    stationKeyEntry = Entry(configMenu, textvariable=stationKey)
+    stationKeyEntry.insert(END, stationKey)
+    departureKeyLabel = Label(configMenu, text="Departure API key:")
+    departureKeyEntry = Entry(configMenu, textvariable=departureKey)
+    departureKeyEntry.insert(END, departureKey)
+    refreshRateLabel = Label(configMenu, text="Refresh rate (min):")
+    refreshRateEntry = Entry(configMenu, textvariable=refreshRate)
+    refreshRateEntry.insert(END, refreshRate)
+    refreshTimeoutLabel = Label(configMenu, text="Refresh timeout (min):")
+    refreshTimeoutEntry = Entry(configMenu, textvariable=refreshTimeout)
+    refreshTimeoutEntry.insert(END, refreshTimeout)
+    stationPhraseLabel = Label(configMenu, text="Station name:")
+    stationPhraseEntry = Entry(configMenu, textvariable=stationPhrase)
+    stationPhraseEntry.insert(END, stationPhrase)
+    saveButton = Button(configMenu, text="Save configuration", command=lambda:
+        saveData(
+            stationKeyEntry.get(),
+            departureKeyEntry.get(),
+            refreshRateEntry.get(),
+            refreshTimeoutEntry.get(),
+            stationPhraseEntry.get()
+            )
+        )
+
+    stationKeyLabel.grid(
+        row = 0,
+        column = 0,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    stationKeyEntry.grid(
+        row = 0,
+        column = 1,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    departureKeyLabel.grid(
+        row = 1,
+        column = 0,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    departureKeyEntry.grid(
+        row = 1,
+        column = 1,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    refreshRateLabel.grid(
+        row = 2,
+        column = 0,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    refreshRateEntry.grid(
+        row = 2,
+        column = 1,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    refreshTimeoutLabel.grid(
+        row = 3,
+        column = 0,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    refreshTimeoutEntry.grid(
+        row = 3,
+        column = 1,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    stationPhraseLabel.grid(
+        row = 4,
+        column = 0,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    stationPhraseEntry.grid(
+        row = 4,
+        column = 1,
+        pady = 2,
+        padx = 2,
+        sticky="nw")
+
+    saveButton.grid(
+        row = 5,
+        column = 0,
+        columnspan = 2,
+        pady = 2,
+        padx = 2
+    )
+
+def saveData(stationKey, departureKey, refreshRate, refreshTimout, stationPhrase):
+    configData = {
+        "StationKey": stationKey,
+        "departureKey": departureKey,
+        "refreshRate": refreshRate,
+        "refreshTimeout": refreshTimeout,
+        "stationPhrase": stationPhrase
+    }
+    with open("config.json", "w") as file:
+        json.dump(configData, file, indent=4)
 
 # Create line color label
 relWidth = 0.94
 relHeight = 0.2
-lineColorLabel = Label(root, bg=lineColorGreen)
-lineColorLabel.place(
+lineColorButton = Button(root, bg=lineColorGreen, activebackground=lineColorGreen, bd=0, command=config)
+lineColorButton.place(
     relwidth=relWidth,
     relheight=relHeight,
     relx=((1-relWidth)/2),
